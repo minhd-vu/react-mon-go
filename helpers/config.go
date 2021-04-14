@@ -11,6 +11,7 @@ import (
 type Configuration struct {
 	Port             string
 	ConnectionString string
+	DatabaseName     string
 }
 
 // GetConfiguration populates dotenv configuration information into a configuration model
@@ -24,6 +25,7 @@ func GetConfiguration() Configuration {
 	configuration := Configuration{
 		os.Getenv("PORT"),
 		os.Getenv("CONNECTION_STRING"),
+		os.Getenv("DATABASE_NAME"),
 	}
 
 	return configuration

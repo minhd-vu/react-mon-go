@@ -11,8 +11,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var Database *mongo.Database
+
 // ConnectDB is used to connect to MongoDB
-func ConnectDB() *mongo.Database {
+func ConnectDB() {
 	// Load in the environment variables from .env
 	config := GetConfiguration()
 
@@ -29,9 +31,7 @@ func ConnectDB() *mongo.Database {
 	fmt.Println("Connected to MongoDB!")
 
 	// Define what database you are using
-	database := client.Database("golang")
-
-	return database
+	Database = client.Database(config.DatabaseName)
 }
 
 // ErrorResponse model

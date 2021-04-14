@@ -15,8 +15,7 @@ import (
 func GetUsers(c *gin.Context) {
 	var users []*models.User
 
-	var database = helpers.ConnectDB()
-	var collection = database.Collection("users")
+	collection := helpers.Database.Collection("users")
 
 	// Get all the users
 	cur, err := collection.Find(context.TODO(), bson.M{})

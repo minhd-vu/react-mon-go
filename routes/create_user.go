@@ -21,8 +21,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	var database = helpers.ConnectDB()
-	var collection = database.Collection("users")
+	collection := helpers.Database.Collection("users")
 
 	// Insert the user into the collection
 	result, err := collection.InsertOne(context.TODO(), user)

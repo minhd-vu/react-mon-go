@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	helpers.ConnectDB()
 
 	// Gin router
 	router := gin.Default()
