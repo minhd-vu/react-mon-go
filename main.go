@@ -2,45 +2,81 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"log"
-	"os"
-	"time"
+	"net/http"
+	"quickstart/helpers"
+	"quickstart/models"
 
-	"github.com/joho/godotenv"
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+var database = helpers.ConnectDB()
+var collection = database.Collection("users")
+
+func getUsers(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var users []models.User
+
+	// Get all the users
+	cur, err := collection.Find(context.TODO(), bson.M{})
+
+	if err != nil {
+		helpers.GetError(err, w)
+		return
+	}
+
+	// Close the cursor once finished
+	defer cur.Close(context.TODO())
+
+	// Iterate through each
+	for cur.Next(context.TODO()) {
+		var user models.User
+		// Decode the user
+		err := cur.Decode(&user)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Add item to the array
+		users = append(users, user)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// Encode the data to the database
+	json.NewEncoder(w).Encode(users)
+}
+
+func createUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var user models.User
+
+	// Decode the user
+	_ = json.NewDecoder(r.Body).Decode(&user)
+
+	// Insert the user into the collection
+	result, err := collection.InsertOne(context.TODO(), user)
+
+	if err != nil {
+		helpers.GetError(err, w)
+		return
+	}
+
+	json.NewEncoder(w).Encode(result)
+}
+
 func main() {
-	// Load in the environment variables from .env
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	r := mux.NewRouter()
 
-	// Connect to the mongodb database.
-	client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("ATLAS_URI")))
-	if err != nil {
-		log.Fatal(err)
-	}
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	err = client.Connect(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Disconnect(ctx)
+	r.HandleFunc("/api/users", getUsers).Methods("GET")
+	r.HandleFunc("/api/users", createUser).Methods("POST")
 
-	err = client.Ping(ctx, readpref.Primary())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	databases, err := client.ListDatabaseNames(ctx, bson.M{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(databases)
+	config := helpers.GetConfiguration()
+	log.Fatal(http.ListenAndServe(config.Port, r))
 }
