@@ -41,7 +41,6 @@ type ErrorResponse struct {
 
 // GetError is used to prepare the error model
 func GetError(err error, w http.ResponseWriter) {
-
 	log.Fatal(err.Error())
 	var response = ErrorResponse{
 		ErrorMessage: err.Error(),
