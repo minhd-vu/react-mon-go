@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/minhd-vu/go-project/helpers"
+	"github.com/minhd-vu/go-project/db"
 	"github.com/minhd-vu/go-project/models"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +15,7 @@ import (
 func GetUsers(c *gin.Context) {
 	var users []*models.User
 
-	collection := helpers.Database.Collection("users")
+	collection := db.Database.Collection("users")
 
 	// Get all the users
 	cur, err := collection.Find(context.TODO(), bson.M{})

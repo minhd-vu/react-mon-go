@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/minhd-vu/go-project/helpers"
+	"github.com/minhd-vu/go-project/db"
 	"github.com/minhd-vu/go-project/models"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	collection := helpers.Database.Collection("users")
+	collection := db.Database.Collection("users")
 
 	// Insert the user into the collection
 	result, err := collection.InsertOne(context.TODO(), user)

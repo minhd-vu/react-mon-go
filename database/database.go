@@ -1,4 +1,4 @@
-package helpers
+package db
 
 import (
 	"context"
@@ -7,16 +7,15 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/minhd-vu/go-project/utils"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var Database *mongo.Database
-
 // ConnectDB is used to connect to MongoDB
-func ConnectDB() {
+func ConnectDB() *mongo.Database {
 	// Load in the environment variables from .env
-	config := GetConfiguration()
+	config := utils.GetConfiguration()
 
 	// Set client options
 	clientOptions := options.Client().ApplyURI(config.ConnectionString)
@@ -31,7 +30,7 @@ func ConnectDB() {
 	fmt.Println("Connected to MongoDB!")
 
 	// Define what database you are using
-	Database = client.Database(config.DatabaseName)
+	return client.Database(config.DatabaseName)
 }
 
 // ErrorResponse model
@@ -54,3 +53,6 @@ func GetError(err error, w http.ResponseWriter) {
 	w.WriteHeader(response.StatusCode)
 	w.Write(message)
 }
+
+// Export the database
+var Database = ConnectDB()

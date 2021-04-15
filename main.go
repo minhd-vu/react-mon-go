@@ -1,16 +1,14 @@
 package main
 
 import (
-	"github.com/minhd-vu/go-project/helpers"
 	"github.com/minhd-vu/go-project/routes"
+	"github.com/minhd-vu/go-project/utils"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	helpers.ConnectDB()
-
 	// Gin router
 	router := gin.Default()
 
@@ -24,6 +22,6 @@ func main() {
 		api.POST("/users", routes.CreateUser)
 	}
 
-	config := helpers.GetConfiguration()
+	config := utils.GetConfiguration()
 	router.Run(config.Port)
 }
