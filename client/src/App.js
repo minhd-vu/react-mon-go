@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import Container from "react-bootstrap/Container";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<Container>
+			<h1 className="text-center">react-mon-go</h1>
+			<p>Baseline for a React, MongoDB, and Golang stack web application.</p>
+			<h2>Setup</h2>
+			<ol>
+				<li>Fill in the environment variables in the <code>example.env</code></li>
+				<li>Rename <code>example.env</code> to <code>.env</code></li>
+			</ol>
+			<h2>What&#39;s Included?</h2>
+			<ul>
+				<li>Golang<ul>
+					<li>Gin</li>
+				</ul>
+				</li>
+				<li>React<ul>
+					<li>Bootstrap</li>
+					<li>React-Bootstrap</li>
+				</ul>
+				</li>
+				<li>MongoDB</li>
+			</ul>
+
+		</Container>
+	);
 }
 
 export default App;
