@@ -1,3 +1,8 @@
-### react-mon-go
+# react-mon-go
 
 Baseline for a React, MongoDB, and Golang stack web application.
+
+## Setup
+
+1. Fill in the environment variables in the `example.env`
+2. Rename `example.env` to `.env`
