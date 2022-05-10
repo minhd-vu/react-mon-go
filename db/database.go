@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/minhd-vu/go-project/utils"
+	"github.com/minhd-vu/react-mon-go/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -15,7 +15,7 @@ import (
 // ConnectDB is used to connect to MongoDB
 func ConnectDB() *mongo.Database {
 	// Load in the environment variables from .env
-	config := utils.GetConfiguration()
+	config := util.GetConfiguration()
 
 	// Set client options
 	clientOptions := options.Client().ApplyURI(config.ConnectionString)

@@ -1,11 +1,10 @@
 package main
 
 import (
-	"github.com/minhd-vu/go-project/routes"
-	"github.com/minhd-vu/go-project/utils"
-
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/minhd-vu/react-mon-go/api"
+	"github.com/minhd-vu/react-mon-go/util"
 )
 
 func main() {
@@ -16,12 +15,12 @@ func main() {
 	router.Use(static.Serve("/", static.LocalFile("./client/build", true)))
 
 	// Router group for the API
-	api := router.Group("/api")
+	route := router.Group("/api")
 	{
-		api.GET("/users", routes.GetUsers)
-		api.POST("/users", routes.CreateUser)
+		route.GET("/users", api.GetUsers)
+		route.POST("/users", api.CreateUser)
 	}
 
-	config := utils.GetConfiguration()
+	config := util.GetConfiguration()
 	router.Run(config.Port)
 }

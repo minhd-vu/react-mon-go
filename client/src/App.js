@@ -25,7 +25,6 @@ function App() {
 				</li>
 				<li>MongoDB</li>
 			</ul>
-
 		</Container>
 	);
 }
