@@ -11,6 +11,30 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+func CreateUser(c *gin.Context) {
+	var user model.User
+
+	// Decode the user
+	err := c.BindJSON(&user)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": err})
+		return
+	}
+
+	collection := db.Database.Collection("users")
+
+	// Insert the user into the collection
+	result, err := collection.InsertOne(c, user)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"msg": err})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 func GetUsers(c *gin.Context) {
 	var users []*model.User
 
@@ -25,10 +49,10 @@ func GetUsers(c *gin.Context) {
 	}
 
 	// Close the cursor once finished
-	defer cur.Close(context.TODO())
+	defer cur.Close(c)
 
 	// Get all the documents
-	err = cur.All(context.TODO(), &users)
+	err = cur.All(c, &users)
 
 	if err := cur.Err(); err != nil {
 		log.Fatal(err)
